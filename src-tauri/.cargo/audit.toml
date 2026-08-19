@@ -1,0 +1,6 @@
+# Tauri keeps Linux GTK crates in the cross-platform lockfile. glib 0.18.5 is
+# not compiled for either supported macOS target, and the affected iterator API
+# is therefore absent from the shipped candidate. Revisit this exact exception
+# before adding Linux support or when Tauri moves its GTK graph to glib 0.20+.
+[advisories]
+ignore = ["RUSTSEC-2024-0429"]

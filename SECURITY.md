@@ -52,6 +52,13 @@ production build, repository secret scan, three-engine browser tests, dependency
 SBOM validation, and license checks. Rust/Tauri changes must also pass formatting, Clippy with
 warnings denied, default and SQLCipher tests, release compilation, and Rust dependency audit.
 
+Tauri's Linux-only GTK dependency graph remains in `Cargo.lock` for reproducibility but is not
+compiled into either supported macOS build. `src-tauri/.cargo/audit.toml` contains one exact
+exception for `RUSTSEC-2024-0429` (`glib` 0.18.5) after `cargo tree --target all -i glib` confirmed
+that it is reachable only through the Linux GTK branch. Adding Linux support, or a Tauri release
+that moves this branch to `glib` 0.20+, requires removing and re-evaluating that exception. No
+advisory family, severity, or dependency category is ignored.
+
 The GitHub workflow has read-only repository permissions. It does not sign, notarize, release,
 deploy, publish packages, or use production secrets. Generated unsigned applications are internal
 verification outputs only and are not uploaded for distribution.
