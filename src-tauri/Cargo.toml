@@ -1,0 +1,55 @@
+[package]
+name = "ai-memory-inspector-core"
+version = "0.3.0"
+description = "Security core for AI Memory Inspector"
+authors = ["AI Memory Inspector contributors"]
+edition = "2021"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+
+[lib]
+name = "ai_memory_inspector_core"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[[bin]]
+name = "ai-memory-inspector"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "=2.6.3", features = [] }
+
+[dependencies]
+aes-gcm = { version = "=0.10.3", features = ["std", "zeroize"] }
+argon2 = { version = "=0.5.3", features = ["std", "zeroize"] }
+base64 = "=0.22.1"
+getrandom = "=0.3.4"
+fs4 = "=1.1.0"
+libc = "=0.2.189"
+regex = { version = "=1.12.2", default-features = false, features = ["std", "unicode-perl", "unicode-gencat", "perf-dfa", "perf-onepass"] }
+rusqlite = { version = "=0.40.2", default-features = false, features = ["bundled-sqlcipher-vendored-openssl"], optional = true }
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.145"
+tauri = { version = "=2.11.5", default-features = false, features = ["wry"] }
+tauri-plugin-dialog = { version = "=2.7.2", default-features = false }
+tauri-plugin-single-instance = "=2.4.3"
+thiserror = "=2.0.17"
+zeroize = { version = "=1.8.1", features = ["derive"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+security-framework = { version = "=3.7.0", default-features = false, features = ["OSX_10_15"] }
+security-framework-sys = { version = "=2.17.0", default-features = false, features = ["OSX_10_15"] }
+
+[dev-dependencies]
+tempfile = "=3.23.0"
+
+[features]
+default = ["encrypted-container"]
+encrypted-container = []
+sqlcipher = ["dep:rusqlite"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

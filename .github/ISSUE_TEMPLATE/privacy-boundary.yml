@@ -1,0 +1,48 @@
+name: Privacy boundary question
+description: Ask about non-sensitive data handling or propose a privacy improvement.
+title: '[Privacy]: '
+labels:
+  - privacy
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        This form is public. Do not include real memory content, exports, backups, credentials,
+        personal identifiers, private paths, or security vulnerability details.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public-report confirmation
+      options:
+        - label: This report contains only fictional examples and no personal or confidential data.
+          required: true
+        - label: This is not a security vulnerability; vulnerabilities will be reported privately.
+          required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Import and normalization
+        - Browser storage and clearing
+        - Native encrypted vault
+        - Redaction and display
+        - Export or cleanup checklist
+        - Backup and restore
+        - Documentation
+        - Other non-sensitive privacy behavior
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behavior or question
+      description: Use a synthetic example if one is needed.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected privacy boundary
+    validations:
+      required: true

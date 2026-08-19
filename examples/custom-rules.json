@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1",
+  "rules": [
+    {
+      "id": "archived-project",
+      "enabled": true,
+      "match": {
+        "operator": "contains",
+        "field": "content",
+        "value": "已归档"
+      },
+      "severity": "medium",
+      "kind": "stale",
+      "title": "可能是旧项目记录",
+      "explanation": "正文包含归档标记，请回到来源人工核实。"
+    },
+    {
+      "id": "old-observation",
+      "enabled": true,
+      "match": {
+        "operator": "date-before",
+        "field": "observedAt",
+        "value": "2025-01-01"
+      },
+      "severity": "medium",
+      "kind": "stale",
+      "title": "观察时间较早",
+      "explanation": "请人工确认记录是否仍然有效。"
+    }
+  ]
+}

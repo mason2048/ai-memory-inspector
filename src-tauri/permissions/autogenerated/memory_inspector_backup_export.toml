@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-memory-inspector-backup-export"
+description = "Enables the memory_inspector_backup_export command without any pre-configured scope."
+commands.allow = ["memory_inspector_backup_export"]
+
+[[permission]]
+identifier = "deny-memory-inspector-backup-export"
+description = "Denies the memory_inspector_backup_export command without any pre-configured scope."
+commands.deny = ["memory_inspector_backup_export"]

@@ -1,0 +1,34 @@
+{
+  "memories": [
+    {
+      "id": "demo-secret",
+      "type": "sensitive",
+      "title": "虚构调试凭据",
+      "content": "虚构测试密码: fictitious-pass-123",
+      "scope": "project",
+      "source": { "uri": "file:///fictional/chat-export.json", "revision": "sha256:demo1", "locator": "对话 #12", "platform": "ChatGPT 导出" },
+      "observedAt": "2026-07-03T10:24:00+08:00",
+      "confidence": 0.98
+    },
+    {
+      "id": "demo-shanghai",
+      "type": "fact",
+      "title": "居住城市",
+      "content": "虚构用户小林住在上海。",
+      "scope": "global",
+      "source": { "uri": "file:///fictional/old-memory.md", "revision": "sha256:demo2", "locator": "第 8 行", "platform": "本地 Markdown" },
+      "observedAt": "2025-04-01T08:00:00+08:00",
+      "confidence": 0.9
+    },
+    {
+      "id": "demo-hangzhou",
+      "type": "fact",
+      "title": "居住城市更新",
+      "content": "虚构用户小林已搬到杭州居住。",
+      "scope": "global",
+      "source": { "uri": "file:///fictional/new-memory.md", "revision": "sha256:demo3", "locator": "第 3 行", "platform": "本地 Markdown" },
+      "observedAt": "2026-06-01T08:00:00+08:00",
+      "confidence": 0.94
+    }
+  ]
+}

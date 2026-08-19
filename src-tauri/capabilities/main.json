@@ -1,0 +1,19 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-window-security-core",
+  "description": "Only the main bundled window may call the nine reviewed vault, project, native-import, and backup commands.",
+  "local": true,
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "allow-memory-inspector-vault-status",
+    "allow-memory-inspector-vault-unlock-with-system",
+    "allow-memory-inspector-vault-lock",
+    "allow-memory-inspector-project-read",
+    "allow-memory-inspector-project-write",
+    "allow-memory-inspector-project-clear",
+    "allow-memory-inspector-import-pick-and-read",
+    "allow-memory-inspector-backup-export",
+    "allow-memory-inspector-backup-restore"
+  ]
+}

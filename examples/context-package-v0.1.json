@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.1",
+  "packageId": "00000000-0000-4000-8000-000000000003",
+  "name": "fictional-memory-package",
+  "kind": "memory",
+  "createdAt": "2026-08-12T00:00:00.000Z",
+  "producer": { "name": "fictional-exporter", "version": "0.1.0" },
+  "items": [
+    {
+      "id": "demo-preference",
+      "type": "preference",
+      "title": "回答偏好",
+      "content": "回答尽量简洁，并优先给出结论。",
+      "scope": "global",
+      "source": { "uri": "file:///fictional/preferences.md", "revision": "sha256:demo4", "locator": "第 2 行" },
+      "validity": { "observedAt": "2026-07-01T12:00:00+08:00", "expiresAt": null, "confidence": 0.88 },
+      "sensitivity": "internal",
+      "tags": ["communication"]
+    }
+  ],
+  "warnings": []
+}

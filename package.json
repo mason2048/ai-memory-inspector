@@ -1,0 +1,83 @@
+{
+  "name": "ai-memory-inspector",
+  "private": true,
+  "version": "0.3.0",
+  "description": "Local-first tooling for inspecting, comparing, redacting, and exporting user-provided AI memory records.",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mason2048/ai-memory-inspector.git"
+  },
+  "homepage": "https://github.com/mason2048/ai-memory-inspector#readme",
+  "bugs": {
+    "url": "https://github.com/mason2048/ai-memory-inspector/issues"
+  },
+  "keywords": [
+    "ai-memory",
+    "local-first",
+    "privacy",
+    "redaction",
+    "tauri"
+  ],
+  "type": "module",
+  "packageManager": "npm@11.11.0",
+  "engines": {
+    "node": "24.x",
+    "npm": "11.11.0"
+  },
+  "volta": {
+    "node": "24.14.1",
+    "npm": "11.11.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "mock:web": "node scripts/mock-web-server.mjs",
+    "build": "tsc -b && vite build",
+    "format:check": "prettier --check package.json package-lock.json eslint.config.js prettier.config.mjs vitest.config.ts playwright.config.ts \"tests/e2e/**/*.ts\" \"scripts/**/*.mjs\" \".github/**/*.yml\" README.md README.zh-CN.md CONTRIBUTING.md \"docs/**/*.md\" MVP_ACCEPTANCE.md GA_READINESS.md SECURITY.md PRIVACY.md THREAT_MODEL.md RELEASE.md ASSET_PROVENANCE.md THIRD_PARTY_NOTICES.md",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "npm run build && playwright test",
+    "secret:scan": "node scripts/secret-scan.mjs",
+    "security:audit": "npm audit --audit-level=high",
+    "sbom": "cyclonedx-npm --omit dev --output-format JSON --output-file dist/ai-memory-inspector.cdx.json --validate",
+    "sbom:check": "npm run sbom && node scripts/verify-sbom.mjs dist/ai-memory-inspector.cdx.json",
+    "license:write": "node scripts/verify-licenses.mjs --write",
+    "license:check": "node scripts/verify-licenses.mjs",
+    "desktop:build:universal:unsigned": "tauri build --target universal-apple-darwin --bundles app --no-sign --ci",
+    "desktop:verify:universal": "node scripts/verify-universal-app.mjs",
+    "updater:release-config:prepare": "node scripts/prepare-release-config.mjs",
+    "updater:release-config:verify": "node scripts/verify-release-config.mjs",
+    "updater:release-config:check": "node --test scripts/release-config.test.mjs",
+    "release:assets:check": "node scripts/verify-release-assets.mjs",
+    "check:offline": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run build && npm run secret:scan && npm run sbom:check && npm run license:check && npm run updater:release-config:check && npm run release:assets:check",
+    "check": "npm run check:offline && npm run test:e2e && npm run security:audit"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@cyclonedx/cyclonedx-npm": "6.0.1",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.1",
+    "@tauri-apps/cli": "2.11.4",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "@vitest/coverage-v8": "4.1.10",
+    "eslint": "10.8.1",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.4",
+    "globals": "17.11.0",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.67.0",
+    "vite": "8.2.1",
+    "vitest": "4.1.10"
+  }
+}

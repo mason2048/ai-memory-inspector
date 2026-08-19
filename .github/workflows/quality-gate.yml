@@ -1,0 +1,119 @@
+name: Production quality gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  CI: true
+  NPM_CONFIG_FUND: false
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify locked source and artifact
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Enforce source-only repository boundary
+        run: |
+          forbidden="$(git ls-files | grep -E '(^|/)(target|coverage|dist|playwright-report|test-results)/|\.(app|dmg|pkg|p12|pfx|pem|key|mobileprovision)$|(^|/)tauri\.release\.conf\.json$' || true)"
+          if [[ -n "$forbidden" ]]; then
+            printf '%s\n' "Tracked generated, binary, credential, or release-overlay files are not allowed:" "$forbidden" >&2
+            exit 1
+          fi
+
+      - name: Use Node 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24.14.1
+          cache: npm
+
+      - name: Pin npm
+        run: npm install --global npm@11.11.0
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@4305c38b25d97ef35a8ad1f985ccf2d2242004f2 # stable
+        with:
+          toolchain: 1.96.0
+          components: rustfmt, clippy
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - name: Install pinned Rust supply-chain tools
+        run: |
+          cargo install cargo-audit --version 0.22.2 --locked
+          cargo install cargo-cyclonedx --version 0.5.9 --locked
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium firefox webkit
+
+      - name: Run production quality gate
+        run: npm run check
+
+      - name: Verify native security core
+        working-directory: src-tauri
+        run: |
+          cargo fmt --check
+          cargo clippy --locked --all-targets -- -D warnings
+          cargo test --locked
+          cargo test --locked --features sqlcipher
+          cargo build --locked --release
+
+      - name: Audit locked Rust dependencies
+        working-directory: src-tauri
+        run: cargo audit
+
+      - name: Generate macOS Rust CycloneDX SBOMs
+        working-directory: src-tauri
+        env:
+          SOURCE_DATE_EPOCH: '0'
+        run: |
+          cargo cyclonedx --format json --target aarch64-apple-darwin --target-in-filename --no-build-deps --spec-version 1.5
+          cargo cyclonedx --format json --target x86_64-apple-darwin --target-in-filename --no-build-deps --spec-version 1.5
+          test "$(find . -maxdepth 1 -name '*.cdx.json' -type f | wc -l | tr -d ' ')" -eq 2
+          git diff --exit-code -- Cargo.lock
+
+      - name: Build unsigned universal internal candidate
+        run: npm run desktop:build:universal:unsigned
+
+      - name: Verify universal candidate metadata
+        run: npm run desktop:verify:universal
+
+      - name: Upload non-sensitive verification reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: verification-reports-${{ github.sha }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            coverage/
+            playwright-report/
+            test-results/
+            dist/ai-memory-inspector.cdx.json
+            src-tauri/*.cdx.json
+            THIRD_PARTY_NOTICES.md
+
+# This workflow intentionally has no signing, notarization, release, deployment,
+# environment secret, or package publication step. Signed GUI/DMG, real-device
+# universal, backup/restore, system-auth and updater E2E remain separate pre-GA gates.

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-memory-inspector-import-pick-and-read"
+description = "Enables the memory_inspector_import_pick_and_read command without any pre-configured scope."
+commands.allow = ["memory_inspector_import_pick_and_read"]
+
+[[permission]]
+identifier = "deny-memory-inspector-import-pick-and-read"
+description = "Denies the memory_inspector_import_pick_and_read command without any pre-configured scope."
+commands.deny = ["memory_inspector_import_pick_and_read"]

@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a reproducible problem using fictional data only.
+title: '[Bug]: '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Do not include memory exports, backups, credentials, personal data, private paths, or
+        screenshots containing user data. Report vulnerabilities through GitHub private
+        vulnerability reporting instead.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I used only fictional reproduction data and removed private paths and identifiers.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: Runtime
+      options:
+        - Browser development build
+        - macOS Tauri source candidate
+        - Automated test or CI
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Source revision
+      description: Commit SHA or branch; do not include local filesystem paths.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal steps and synthetic input needed to reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Verification results
+      description: List exact checks run and whether each passed, failed, or could not run.
